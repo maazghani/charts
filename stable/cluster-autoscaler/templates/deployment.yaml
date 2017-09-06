@@ -18,6 +18,9 @@ spec:
       labels:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
+      {{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+      {{- end }}
     spec:
       containers:
         - name: {{ template "name" . }}
@@ -65,6 +68,8 @@ spec:
 {{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
       serviceAccountName: {{ if .Values.rbac.create }}{{ template "fullname" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
       volumes:
         - name: ssl-certs
           hostPath:
